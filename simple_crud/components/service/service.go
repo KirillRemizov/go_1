@@ -5,10 +5,14 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-type CrudService struct{}
+type CrudService struct {
+	localStorage map[string]*types.WeatherCondition
+}
 
 func NewCrudService() *CrudService {
-	s := &CrudService{}
+	s := &CrudService{
+		localStorage: make(map[string]*types.WeatherCondition),
+	}
 	return s
 }
 
@@ -19,6 +23,8 @@ func (s *CrudService) CreateWeatherCondition(temperature float64, windSpeed floa
 		Temperature: temperature,
 		WindSpeed:   windSpeed,
 	}
+
+	s.localStorage[condition.ID] = condition
 
 	return condition, nil
 }

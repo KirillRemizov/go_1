@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/KirillRemizov/GO_1/first_service/components/five_printer"
+)
 
 func main() {
 

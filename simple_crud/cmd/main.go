@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/KirillRemizov/GO_1/simple_crud/components/service"
@@ -20,4 +21,14 @@ func main() {
 
 	spew.Dump(condition)
 
+	srv.UpdateWeatherCondition(condition.ID, 25.3, 0.11)
+
+	srv.ListLocalStorage()
+
+	fmt.Println("Read Condition:")
+	spew.Dump(srv.ReadWeatherCondition(condition.ID))
+
+	srv.DeleteWeatherCondition(condition.ID)
+
+	srv.ListLocalStorage()
 }

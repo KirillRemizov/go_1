@@ -1,0 +1,1 @@
+go run C:\Users\kiril\go_1\a1\cmd\main.go

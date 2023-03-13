@@ -20,15 +20,20 @@ func main() {
 	}
 
 	spew.Dump(condition)
+	temp, wind := 25.3, 0.11
+	srv.UpdateWeatherCondition(condition.ID, &temp, &wind)
 
-	srv.UpdateWeatherCondition(condition.ID, 25.3, 0.11)
-
-	srv.ListLocalStorage()
+	srv.ListWeatherConditions()
 
 	fmt.Println("Read Condition:")
 	spew.Dump(srv.ReadWeatherCondition(condition.ID))
 
+	fmt.Println("Printing list:")
+	fmt.Println(srv.ListWeatherConditions())
+
 	srv.DeleteWeatherCondition(condition.ID)
 
-	srv.ListLocalStorage()
+	fmt.Println("Printing list after deletion:")
+	fmt.Println(srv.ListWeatherConditions())
+
 }

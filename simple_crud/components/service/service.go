@@ -18,6 +18,8 @@ func NewCrudService() *CrudService {
 	return s
 }
 
+var _ types.Service = (*CrudService)(nil)
+
 func (s *CrudService) CreateWeatherCondition(temperature float64, windSpeed float64) (*types.WeatherCondition, error) {
 
 	/* Creates condition object.

@@ -82,7 +82,7 @@ func (s *CrudService) ReadWeatherCondition(id string) (*types.WeatherCondition, 
 
 func (s *CrudService) ListWeatherConditions() ([]*types.WeatherCondition, error) {
 	//
-	list := []*types.WeatherCondition{}
+	list := make([]*types.WeatherCondition, 0, len(s.localStorage))
 
 	for _, k := range s.localStorage {
 		list = append(list, k)

@@ -19,7 +19,14 @@ func main() {
 		log.Println(err)
 	}
 
+	condition_2, err := srv.CreateWeatherCondition(30.2, 0.9)
+
+	if err != nil {
+		log.Println(err)
+	}
 	spew.Dump(condition)
+	spew.Dump(condition_2)
+
 	temp, wind := 25.3, 0.11
 	srv.UpdateWeatherCondition(condition.ID, &temp, &wind)
 
@@ -29,7 +36,7 @@ func main() {
 	spew.Dump(srv.ReadWeatherCondition(condition.ID))
 
 	fmt.Println("Printing list:")
-	fmt.Println(srv.ListWeatherConditions())
+	fmt.Printf(srv.ListWeatherConditions())
 
 	srv.DeleteWeatherCondition(condition.ID)
 

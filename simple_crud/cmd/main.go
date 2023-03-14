@@ -36,7 +36,7 @@ func main() {
 	spew.Dump(srv.ReadWeatherCondition(condition.ID))
 
 	fmt.Println("Printing list:")
-	fmt.Printf(srv.ListWeatherConditions())
+	fmt.Println(srv.ListWeatherConditions())
 
 	srv.DeleteWeatherCondition(condition.ID)
 

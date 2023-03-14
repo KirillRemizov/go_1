@@ -13,3 +13,11 @@ type Service interface {
 	ReadWeatherCondition(id string) (*WeatherCondition, error)
 	ListWeatherConditions() ([]*WeatherCondition, error)
 }
+
+type Storage interface {
+	StoreCondition(*WeatherCondition) error
+	DeleteCondition(id string) error
+	UpdateCondition(id string, temperature *float64, windSpeed *float64) error
+	ReadCondition(id string) (*WeatherCondition, error)
+	ListConditions() ([]*WeatherCondition, error)
+}

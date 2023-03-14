@@ -8,22 +8,19 @@ import (
 )
 
 type CrudService struct {
-	localStorage map[string]*types.WeatherCondition
+	storage types.Storage
 }
 
 func NewCrudService() *CrudService {
-	s := &CrudService{
-		localStorage: make(map[string]*types.WeatherCondition),
-	}
+	s := &CrudService{}
 	return s
 }
 
-var _ types.Service = (*CrudService)(nil)
+//var _ types.Service = (*CrudService)(nil)
 
 func (s *CrudService) CreateWeatherCondition(temperature float64, windSpeed float64) (*types.WeatherCondition, error) {
 
-	/* Creates condition object.
-	   Adds pointer of new object to map storage. */
+	// Creates condition object.
 
 	condition := &types.WeatherCondition{
 		ID:          uuid.NewV4().String(),
@@ -31,65 +28,50 @@ func (s *CrudService) CreateWeatherCondition(temperature float64, windSpeed floa
 		WindSpeed:   windSpeed,
 	}
 
-	s.localStorage[condition.ID] = condition
+	err := s.storage.StoreCondition(condition)
+
+	if err != nil {
+		return condition, errors.New("unable to store condition")
+	}
 
 	return condition, nil
 }
 
 func (s *CrudService) DeleteWeatherCondition(id string) error {
 
-	/* Deletes pointer of condition from map storage by id.
-	   Returns error if not found.
-	   What will happen with the object? */
-
-	_, exists := s.localStorage[id]
-	if exists {
-		delete(s.localStorage, id)
-		return nil
-	}
-	return errors.New("not found")
+	return s.storage.DeleteCondition(id)
 
 }
 
 func (s *CrudService) UpdateWeatherCondition(id string, temperature *float64, windSpeed *float64) error {
 
-	condition, exists := s.localStorage[id]
+	err := s.storage.UpdateCondition(id, temperature, windSpeed)
 
-	if !exists {
-		return errors.New("not found")
-
+	if err != nil {
+		return err
 	}
-	if temperature != nil {
-		condition.Temperature = *temperature
-	}
-	if windSpeed != nil {
-		condition.WindSpeed = *windSpeed
-	}
-
 	return nil
-
 }
 
 func (s *CrudService) ReadWeatherCondition(id string) (*types.WeatherCondition, error) {
 	// Returns pointer to condition object if it exist in map
 
-	condition, exists := s.localStorage[id]
+	condition, err := s.storage.ReadCondition(id)
 
-	if !exists {
-		return nil, errors.New("not found")
+	if err != nil {
+		return nil, err
 	}
 
 	return condition, nil
 }
 
 func (s *CrudService) ListWeatherConditions() ([]*types.WeatherCondition, error) {
-	//
-	list := make([]*types.WeatherCondition, 0, len(s.localStorage))
 
-	for _, k := range s.localStorage {
-		list = append(list, k)
+	list, err := s.storage.ListConditions()
+
+	if err != nil {
+		return nil, err
 	}
 
 	return list, nil
-
 }

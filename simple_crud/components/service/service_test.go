@@ -38,13 +38,11 @@ func TestCreate(t *testing.T) {
 
 	}
 
-	_, exist := s.localStorage[result.ID]
+	_, err = s.storage.ReadCondition(result.ID)
 
-	if !exist {
+	if err != nil {
 		t.Error("not found in local storage")
 	}
-
-	// reflect.DeepEqual(map_1, map_2)
 
 }
 
@@ -93,9 +91,9 @@ func TestDelete(t *testing.T) {
 
 	s.DeleteWeatherCondition(result.ID)
 
-	_, exist := s.localStorage[result.ID]
+	_, err = s.storage.ReadCondition(result.ID)
 
-	if exist {
+	if err != nil {
 		t.Error("exist in local storage after deletion")
 		return
 	}

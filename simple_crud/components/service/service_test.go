@@ -3,6 +3,7 @@ package service
 import (
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/KirillRemizov/GO_1/simple_crud/components/storage"
 )
@@ -68,14 +69,14 @@ func TestUpdate(t *testing.T) {
 	s.UpdateWeatherCondition(result.ID, nil, nil)
 
 	if result.Temperature != temperature || result.WindSpeed != windSpeed {
-		t.Error("temperature or winspeed is updated with nil arguments")
+		t.Error("temperature or wind speed is updated with nil arguments")
 		return
 	}
 
 	s.UpdateWeatherCondition(result.ID, &newTemp, &newWind)
 
 	if result.Temperature != newTemp && result.WindSpeed != newWind {
-		t.Error("temperature and windspeed not updated")
+		t.Error("temperature and wind speed not updated")
 		return
 
 	}
@@ -219,4 +220,32 @@ func TestList(t *testing.T) {
 
 	t.Error("Second is not in the list")
 
+}
+
+func TestRace(t *testing.T) {
+
+	t.Skip()
+
+	str := storage.NewStorage()
+	s := NewCrudService(str)
+
+	for i := 0; i < 100; i++ {
+		s.CreateWeatherCondition(42.0, 73.0)
+	}
+
+	// запись
+	go func() {
+		for {
+			s.ListWeatherConditions()
+		}
+	}()
+
+	// чтение
+	go func() {
+		for {
+			s.CreateWeatherCondition(42.0, 73.0)
+		}
+	}()
+
+	<-time.After(time.Second * 1)
 }

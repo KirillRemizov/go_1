@@ -11,8 +11,8 @@ type CrudService struct {
 	storage types.Storage
 }
 
-func NewCrudService() *CrudService {
-	s := &CrudService{}
+func NewCrudService(storage types.Storage) *CrudService {
+	s := &CrudService{storage: storage}
 	return s
 }
 

@@ -3,11 +3,14 @@ package service
 import (
 	"reflect"
 	"testing"
+
+	"github.com/KirillRemizov/GO_1/simple_crud/components/storage"
 )
 
 func TestCreate(t *testing.T) {
 
-	s := NewCrudService()
+	str := storage.NewStorage()
+	s := NewCrudService(str)
 
 	temperature := 22.1
 	windSpeed := 1.2
@@ -51,7 +54,8 @@ func TestUpdate(t *testing.T) {
 	temperature := 22.1
 	windSpeed := 1.2
 
-	s := NewCrudService()
+	str := storage.NewStorage()
+	s := NewCrudService(str)
 
 	result, err := s.CreateWeatherCondition(temperature, windSpeed)
 	if err != nil {
@@ -80,7 +84,8 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	s := NewCrudService()
+	str := storage.NewStorage()
+	s := NewCrudService(str)
 	temperature := 22.1
 	windSpeed := 1.2
 
@@ -91,9 +96,13 @@ func TestDelete(t *testing.T) {
 
 	s.DeleteWeatherCondition(result.ID)
 
-	_, err = s.storage.ReadCondition(result.ID)
+	readed, err := s.ReadWeatherCondition(result.ID)
 
-	if err != nil {
+	if readed != nil {
+		t.Error("Readed object is no nill")
+	}
+
+	if err == nil {
 		t.Error("exist in local storage after deletion")
 		return
 	}
@@ -102,7 +111,8 @@ func TestDelete(t *testing.T) {
 
 func TestRead(t *testing.T) {
 
-	s := NewCrudService()
+	str := storage.NewStorage()
+	s := NewCrudService(str)
 
 	temperature := 22.1
 	windSpeed := 1.2
@@ -128,7 +138,8 @@ func TestRead(t *testing.T) {
 
 func TestList(t *testing.T) {
 
-	s := NewCrudService()
+	str := storage.NewStorage()
+	s := NewCrudService(str)
 
 	temperature := 22.1
 	windSpeed := 1.2

@@ -10,6 +10,13 @@ type Storage struct {
 	localStorage map[string]*types.WeatherCondition
 }
 
+func NewStorage() *Storage {
+	s := &Storage{
+		localStorage: make(map[string]*types.WeatherCondition),
+	}
+	return s
+}
+
 func (s *Storage) StoreCondition(condition *types.WeatherCondition) error {
 
 	/* Adds pointer of new object to map storage. */

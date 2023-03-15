@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/KirillRemizov/GO_1/simple_crud/components/service"
+	"github.com/KirillRemizov/GO_1/simple_crud/components/storage"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -12,7 +13,8 @@ func main() {
 
 	log.SetFlags(log.Lshortfile)
 
-	srv := service.NewCrudService()
+	str := storage.NewStorage()
+	srv := service.NewCrudService(str)
 
 	condition, err := srv.CreateWeatherCondition(22.2, 0.73)
 	if err != nil {

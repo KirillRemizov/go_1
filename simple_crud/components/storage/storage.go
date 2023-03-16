@@ -2,11 +2,13 @@ package storage
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/KirillRemizov/GO_1/simple_crud/types"
 )
 
 type Storage struct {
+	lock         sync.Mutex
 	localStorage map[string]*types.WeatherCondition
 }
 
@@ -20,6 +22,9 @@ func NewStorage() *Storage {
 func (s *Storage) StoreCondition(condition *types.WeatherCondition) error {
 
 	/* Adds pointer of new object to map storage. */
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
 	_, exist := s.localStorage[condition.ID]
 
 	if exist {
@@ -35,6 +40,9 @@ func (s *Storage) StoreCondition(condition *types.WeatherCondition) error {
 //	Returns error if not found.
 func (s *Storage) DeleteCondition(id string) error {
 
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
 	_, exists := s.localStorage[id]
 	if exists {
 		delete(s.localStorage, id)
@@ -45,6 +53,9 @@ func (s *Storage) DeleteCondition(id string) error {
 }
 
 func (s *Storage) UpdateCondition(id string, temperature *float64, windSpeed *float64) error {
+
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
 	condition, exists := s.localStorage[id]
 
@@ -66,6 +77,9 @@ func (s *Storage) UpdateCondition(id string, temperature *float64, windSpeed *fl
 func (s *Storage) ReadCondition(id string) (*types.WeatherCondition, error) {
 	// Returns pointer to condition object if it exist in map
 
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
 	condition, exists := s.localStorage[id]
 
 	if !exists {
@@ -76,6 +90,9 @@ func (s *Storage) ReadCondition(id string) (*types.WeatherCondition, error) {
 }
 
 func (s *Storage) ListConditions() ([]*types.WeatherCondition, error) {
+
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
 	list := make([]*types.WeatherCondition, 0, len(s.localStorage))
 

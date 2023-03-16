@@ -224,7 +224,7 @@ func TestList(t *testing.T) {
 
 func TestRace(t *testing.T) {
 
-	t.Skip()
+	//t.Skip()
 
 	str := storage.NewStorage()
 	s := NewCrudService(str)

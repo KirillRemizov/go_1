@@ -8,7 +8,7 @@ import (
 )
 
 type Storage struct {
-	lock         sync.Mutex
+	lock         sync.RWMutex
 	localStorage map[string]*types.WeatherCondition
 }
 
@@ -77,8 +77,8 @@ func (s *Storage) UpdateCondition(id string, temperature *float64, windSpeed *fl
 func (s *Storage) ReadCondition(id string) (*types.WeatherCondition, error) {
 	// Returns pointer to condition object if it exist in map
 
-	s.lock.Lock()
-	defer s.lock.Unlock()
+	s.lock.RLock()
+	defer s.lock.RUnlock()
 
 	condition, exists := s.localStorage[id]
 
@@ -91,8 +91,8 @@ func (s *Storage) ReadCondition(id string) (*types.WeatherCondition, error) {
 
 func (s *Storage) ListConditions() ([]*types.WeatherCondition, error) {
 
-	s.lock.Lock()
-	defer s.lock.Unlock()
+	s.lock.RLock()
+	defer s.lock.RUnlock()
 
 	list := make([]*types.WeatherCondition, 0, len(s.localStorage))
 
